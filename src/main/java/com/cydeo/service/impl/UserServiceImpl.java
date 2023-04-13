@@ -4,7 +4,9 @@ import com.cydeo.dto.UserDTO;
 import com.cydeo.repository.UserRepository;
 import com.cydeo.service.UserService;
 import com.cydeo.utils.MapperUtil;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final MapperUtil mapperUtil;

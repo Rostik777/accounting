@@ -4,7 +4,9 @@ import com.cydeo.dto.AddressDTO;
 import com.cydeo.repository.AddressRepository;
 import com.cydeo.service.AddressService;
 import com.cydeo.utils.MapperUtil;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
     private final MapperUtil mapperUtil;

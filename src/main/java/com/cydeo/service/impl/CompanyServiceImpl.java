@@ -4,7 +4,9 @@ import com.cydeo.dto.CompanyDTO;
 import com.cydeo.repository.CompanyRepository;
 import com.cydeo.service.CompanyService;
 import com.cydeo.utils.MapperUtil;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
     private final MapperUtil mapperUtil;

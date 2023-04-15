@@ -2,6 +2,7 @@ package com.cydeo.service.impl;
 
 import com.cydeo.dto.CompanyDTO;
 import com.cydeo.entity.Company;
+import com.cydeo.enums.CompanyStatus;
 import com.cydeo.repository.CompanyRepository;
 import com.cydeo.service.CompanyService;
 import com.cydeo.utils.MapperUtil;
@@ -35,5 +36,17 @@ public class CompanyServiceImpl implements CompanyService {
                 .sorted(Comparator.comparing(Company::getCompanyStatus).thenComparing(Company::getTitle))
                 .map(each -> mapperUtil.convert(each, new CompanyDTO()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public CompanyDTO create(CompanyDTO companyDTO) {
+        companyDTO.setCompanyStatus(CompanyStatus.PASSIVE);
+        Company company = companyRepository.save(mapperUtil.convert(companyDTO, new Company()));
+        return mapperUtil.convert(company, new CompanyDTO());
+    }
+
+    @Override
+    public boolean isTitleExist(String title) {
+        return companyRepository.existsByTitle(title);
     }
 }

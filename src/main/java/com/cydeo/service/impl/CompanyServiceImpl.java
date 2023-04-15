@@ -49,4 +49,16 @@ public class CompanyServiceImpl implements CompanyService {
     public boolean isTitleExist(String title) {
         return companyRepository.existsByTitle(title);
     }
+
+    @Override
+    public CompanyDTO update(Long companyId, CompanyDTO companyDTO) {
+        Company savedCompany = companyRepository.findCompanyById(companyId);
+        companyDTO.setId(companyId);
+        companyDTO.setCompanyStatus(savedCompany.getCompanyStatus());
+        companyDTO.getAddress().setCountry(savedCompany.getAddress().getCountry());
+        companyDTO.getAddress().setId(savedCompany.getAddress().getId());
+        Company updatedCompany = mapperUtil.convert(companyDTO, new Company());
+        companyRepository.save(updatedCompany);
+        return mapperUtil.convert(updatedCompany, new CompanyDTO());
+    }
 }

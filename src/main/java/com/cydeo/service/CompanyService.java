@@ -9,4 +9,5 @@ public interface CompanyService {
     List<CompanyDTO> getAllCompanies();
     CompanyDTO create(CompanyDTO companyDto);
     boolean isTitleExist(String title);
+    CompanyDTO update(Long companyId, CompanyDTO companyDTO);
 }

@@ -10,4 +10,6 @@ public interface CompanyService {
     CompanyDTO create(CompanyDTO companyDto);
     boolean isTitleExist(String title);
     CompanyDTO update(Long companyId, CompanyDTO companyDTO);
+    void activate(Long companyId);
+    void deactivate(Long companyId);
 }

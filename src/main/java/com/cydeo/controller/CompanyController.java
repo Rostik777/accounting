@@ -66,4 +66,16 @@ public class CompanyController {
         companyService.update(companyId, companyDto);
         return "redirect:/companies/list";
     }
+
+    @GetMapping("/activate/{companyId}")
+    public String activateCompany(@PathVariable("companyId") Long companyId) {
+        companyService.activate(companyId);
+        return "redirect:/companies/list";
+    }
+
+    @GetMapping("/deactivate/{companyId}")
+    public String deactivateCompany(@PathVariable("companyId") Long companyId) {
+        companyService.deactivate(companyId);
+        return "redirect:/companies/list";
+    }
 }

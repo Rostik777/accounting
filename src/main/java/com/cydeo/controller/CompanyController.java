@@ -1,6 +1,7 @@
 package com.cydeo.controller;
 
 import com.cydeo.dto.CompanyDTO;
+import com.cydeo.service.AddressService;
 import com.cydeo.service.CompanyService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,9 +14,11 @@ import javax.validation.Valid;
 @RequestMapping("/companies")
 public class CompanyController {
     private final CompanyService companyService;
+    private final AddressService addressService;
 
-    public CompanyController(CompanyService companyService) {
+    public CompanyController(CompanyService companyService, AddressService addressService) {
         this.companyService = companyService;
+        this.addressService = addressService;
     }
 
     @GetMapping("/list")
@@ -77,5 +80,10 @@ public class CompanyController {
     public String deactivateCompany(@PathVariable("companyId") Long companyId) {
         companyService.deactivate(companyId);
         return "redirect:/companies/list";
+    }
+
+    @ModelAttribute
+    public void commonAttributes(Model model) {
+        model.addAttribute("countries",addressService.getCountryList() );
     }
 }

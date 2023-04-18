@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
@@ -43,4 +42,93 @@ public class UserDTO {
 
 
     private Boolean isOnlyAdmin;
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+        checkConfirmPassword();
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+        checkConfirmPassword();
+    }
+
+    private void checkConfirmPassword() {
+        if (password != null && !password.equals(confirmPassword)) {
+            this.confirmPassword = null;
+        }
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public RoleDTO getRole() {
+        return role;
+    }
+
+    public void setRole(RoleDTO role) {
+        this.role = role;
+    }
+
+    public CompanyDTO getCompany() {
+        return company;
+    }
+
+    public void setCompany(CompanyDTO company) {
+        this.company = company;
+    }
+
+    public Boolean getIsOnlyAdmin() {
+        return isOnlyAdmin;
+    }
+
+    public void setIsOnlyAdmin(Boolean isOnlyAdmin) {
+        this.isOnlyAdmin = isOnlyAdmin;
+    }
 }

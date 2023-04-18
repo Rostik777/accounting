@@ -7,6 +7,7 @@ import com.cydeo.service.SecurityService;
 import com.cydeo.service.UserService;
 import com.cydeo.utils.MapperUtil;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -18,11 +19,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final MapperUtil mapperUtil;
     private final SecurityService securityService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, MapperUtil mapperUtil, @Lazy SecurityService securityService) {
+    public UserServiceImpl(UserRepository userRepository, MapperUtil mapperUtil,
+                           @Lazy SecurityService securityService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.mapperUtil = mapperUtil;
         this.securityService = securityService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -52,6 +56,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findByUsername(String username) {
         User user = userRepository.findByUsername(username);
+        return mapperUtil.convert(user, new UserDTO());
+    }
+
+    @Override
+    public boolean emailExist(UserDTO userDTO) {
+        User userWithUpdatedEmail = userRepository.findByUsername(userDTO.getUsername());
+        if (userWithUpdatedEmail == null) return false;
+        return  !userWithUpdatedEmail.getId().equals(userDTO.getId());
+    }
+
+    @Override
+    public UserDTO save(UserDTO userDTO) {
+        User user = mapperUtil.convert(userDTO, new User());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setEnabled(true);
+        userRepository.save(user);
         return mapperUtil.convert(user, new UserDTO());
     }
 

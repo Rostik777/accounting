@@ -1,9 +1,7 @@
 package com.cydeo.entity;
 
 import com.cydeo.enums.CompanyStatus;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 

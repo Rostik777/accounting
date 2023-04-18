@@ -5,6 +5,7 @@ import com.cydeo.entity.Company;
 import com.cydeo.enums.CompanyStatus;
 import com.cydeo.repository.CompanyRepository;
 import com.cydeo.service.CompanyService;
+import com.cydeo.service.SecurityService;
 import com.cydeo.utils.MapperUtil;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,12 @@ import java.util.stream.Collectors;
 public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
     private final MapperUtil mapperUtil;
+    private final SecurityService securityService;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository, MapperUtil mapperUtil) {
+    public CompanyServiceImpl(CompanyRepository companyRepository, MapperUtil mapperUtil, SecurityService securityService) {
         this.companyRepository = companyRepository;
         this.mapperUtil = mapperUtil;
+        this.securityService = securityService;
     }
 
     @Override
@@ -76,5 +79,23 @@ public class CompanyServiceImpl implements CompanyService {
         company.setCompanyStatus(CompanyStatus.PASSIVE);
         companyRepository.save(company);
         mapperUtil.convert(company, new CompanyDTO());
+    }
+
+    @Override
+    public List<CompanyDTO> getFilteredCompaniesForCurrentUser() {
+        return  getAllCompanies().stream()
+                .filter(each -> {
+                    if (securityService.getLoggedInUser().getRole().getDescription().equalsIgnoreCase("Root User")) {
+                        return each.getCompanyStatus().equals(CompanyStatus.ACTIVE);
+                    } else {
+                        return each.getTitle().equals(getCompanyByLoggedInUser().getTitle());
+                    }
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public CompanyDTO getCompanyByLoggedInUser() {
+        return securityService.getLoggedInUser().getCompany();
     }
 }

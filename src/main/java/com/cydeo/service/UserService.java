@@ -8,4 +8,6 @@ public interface UserService {
     UserDTO findUserById(Long id);
     List<UserDTO> getFilteredUsers() throws Exception;
     UserDTO findByUsername(String username);
+    boolean emailExist(UserDTO userDTO);
+    UserDTO save(UserDTO userDTO);
 }

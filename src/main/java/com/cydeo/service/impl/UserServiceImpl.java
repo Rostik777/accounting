@@ -84,6 +84,15 @@ public class UserServiceImpl implements UserService {
         return mapperUtil.convert(savedUser, new UserDTO());
     }
 
+    @Override
+    public void delete(Long id) {
+        User user = userRepository.findUserById(id);
+        user.setUsername(user.getUsername() + " " + user.getId());
+
+        user.setIsDeleted(true);
+        userRepository.save(user);
+    }
+
     private Boolean isCurrentUserRootUser() {
         return  securityService.getLoggedInUser().getRole().getDescription().equalsIgnoreCase("root user");
     }

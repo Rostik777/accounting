@@ -73,6 +73,12 @@ public class UserController {
         return "redirect:/users/list";
     }
 
+    @GetMapping("/delete/{userId}")
+    public String deleteUser(@PathVariable("userId") Long userId) {
+        userService.delete(userId);
+        return "redirect:/users/list";
+    }
+
     @ModelAttribute
     public void commonAttributes(Model model) {
         model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());

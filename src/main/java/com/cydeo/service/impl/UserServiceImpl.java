@@ -75,6 +75,15 @@ public class UserServiceImpl implements UserService {
         return mapperUtil.convert(user, new UserDTO());
     }
 
+    @Override
+    public UserDTO update(UserDTO userDTO) {
+        User updatedUser = mapperUtil.convert(userDTO, new User());
+        updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        updatedUser.setEnabled(userRepository.findUserById(userDTO.getId()).isEnabled());
+        User savedUser = userRepository.save(updatedUser);
+        return mapperUtil.convert(savedUser, new UserDTO());
+    }
+
     private Boolean isCurrentUserRootUser() {
         return  securityService.getLoggedInUser().getRole().getDescription().equalsIgnoreCase("root user");
     }

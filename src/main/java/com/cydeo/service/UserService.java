@@ -10,4 +10,5 @@ public interface UserService {
     UserDTO findByUsername(String username);
     boolean emailExist(UserDTO userDTO);
     UserDTO save(UserDTO userDTO);
+    UserDTO update(UserDTO userDTO);
 }

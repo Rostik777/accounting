@@ -7,10 +7,7 @@ import com.cydeo.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -51,6 +48,28 @@ public class UserController {
         }
 
         userService.save(userDTO);
+        return "redirect:/users/list";
+    }
+
+    @GetMapping("/update/{userId}")
+    public String navigateToUserUpdate(@PathVariable("userId") Long userId, Model model) {
+        model.addAttribute("user", userService.findUserById(userId));
+        return "/user/user-update";
+    }
+
+    @PostMapping("/update/{userId}")
+    public String updateUser(@PathVariable("userId") Long userId, @Valid @ModelAttribute("user") UserDTO userDTO, BindingResult bindingResult) {
+        userDTO.setId(userId);
+        boolean emailExist = userService.emailExist(userDTO);
+
+        if (bindingResult.hasErrors() || emailExist) {
+           if (emailExist) {
+               bindingResult.rejectValue("username", " ", "A user with this email already exists. Please try with different email.");
+           }
+           return "/user/user-update";
+        }
+
+        userService.update(userDTO);
         return "redirect:/users/list";
     }
 

@@ -50,4 +50,12 @@ public class ClientVendorServiceImpl implements ClientVendorService {
         ClientVendor clientVendor = mapperUtil.convert(clientVendorDTO, new ClientVendor());
         return mapperUtil.convert(clientVendorRepository.save(clientVendor), new ClientVendorDTO());
     }
+
+    @Override
+    public boolean companyNameExists(ClientVendorDTO clientVendorDTO) {
+        Company actualCompany = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
+        ClientVendor existingClientVendor = clientVendorRepository.findByClientVendorNameAndCompany(clientVendorDTO.getClientVendorName(), actualCompany);
+        if (existingClientVendor == null) return false;
+        return !existingClientVendor.getId().equals(clientVendorDTO.getId());
+    }
 }

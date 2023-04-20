@@ -8,4 +8,5 @@ public interface ClientVendorService {
     ClientVendorDTO findClientVendorById(Long id);
     List<ClientVendorDTO> getAllClientVendors();
     ClientVendorDTO create(ClientVendorDTO clientVendorDTO);
+    boolean companyNameExists(ClientVendorDTO clientVendorDTO);
 }

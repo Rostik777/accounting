@@ -20,7 +20,7 @@ public class ClientVendor extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ClientVendorType clientVendorType;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
 

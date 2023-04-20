@@ -43,4 +43,11 @@ public class ClientVendorServiceImpl implements ClientVendorService {
                 .map(each -> mapperUtil.convert(each, new ClientVendorDTO()))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public ClientVendorDTO create(ClientVendorDTO clientVendorDTO) {
+        clientVendorDTO.setCompany(securityService.getLoggedInUser().getCompany());
+        ClientVendor clientVendor = mapperUtil.convert(clientVendorDTO, new ClientVendor());
+        return mapperUtil.convert(clientVendorRepository.save(clientVendor), new ClientVendorDTO());
+    }
 }

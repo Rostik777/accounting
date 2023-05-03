@@ -58,4 +58,13 @@ public class ClientVendorServiceImpl implements ClientVendorService {
         if (existingClientVendor == null) return false;
         return !existingClientVendor.getId().equals(clientVendorDTO.getId());
     }
+
+    @Override
+    public ClientVendorDTO update(Long clientVendorId, ClientVendorDTO clientVendorDTO) throws ClassNotFoundException, CloneNotSupportedException {
+        ClientVendor savedClientVendor = clientVendorRepository.findClientVendorById(clientVendorId);
+        clientVendorDTO.getAddress().setId(savedClientVendor.getAddress().getId());
+        clientVendorDTO.setCompany(securityService.getLoggedInUser().getCompany());
+        ClientVendor updatedClientVendor = mapperUtil.convert(clientVendorDTO, new ClientVendor());
+        return mapperUtil.convert(clientVendorRepository.save(updatedClientVendor), clientVendorDTO);
+    }
 }

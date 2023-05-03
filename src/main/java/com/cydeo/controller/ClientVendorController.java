@@ -7,10 +7,7 @@ import com.cydeo.service.ClientVendorService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Arrays;
@@ -50,6 +47,27 @@ public class ClientVendorController {
         }
 
         clientVendorService.create(clientVendorDTO);
+        return "redirect:/clientVendors/list";
+    }
+
+    @GetMapping("/update/{clientVendorId}")
+    public String navigateToClientVendorUpdate(@PathVariable("clientVendorId") Long clientVendorId, Model model) {
+        model.addAttribute("clientVendor", clientVendorService.findClientVendorById(clientVendorId));
+        return "/clientVendor/clientVendor-update";
+    }
+
+    @PostMapping("/update/{clientVendorId}")
+    public String updateClientVendor(@PathVariable("clientVendorId") Long clientVendorId, @Valid @ModelAttribute("clientVendor") ClientVendorDTO clientVendorDTO, BindingResult bindingResult) throws ClassNotFoundException, CloneNotSupportedException {
+        clientVendorDTO.setId(clientVendorId);
+        boolean isDuplicatedCompanyName = clientVendorService.companyNameExists(clientVendorDTO);
+
+        if (bindingResult.hasErrors() || isDuplicatedCompanyName) {
+            if(isDuplicatedCompanyName) {
+                bindingResult.rejectValue("clientVendorName", " ", "A client/vendor with this name already exists. Please try with different name.");
+            }
+            return "/clientVendor/clientVendor-update";
+        }
+        clientVendorService.update(clientVendorId, clientVendorDTO);
         return "redirect:/clientVendors/list";
     }
 

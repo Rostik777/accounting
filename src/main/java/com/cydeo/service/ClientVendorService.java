@@ -10,4 +10,5 @@ public interface ClientVendorService {
     ClientVendorDTO create(ClientVendorDTO clientVendorDTO);
     boolean companyNameExists(ClientVendorDTO clientVendorDTO);
     ClientVendorDTO update(Long id, ClientVendorDTO clientVendorDTO) throws ClassNotFoundException, CloneNotSupportedException;
+    void delete(Long id);
 }

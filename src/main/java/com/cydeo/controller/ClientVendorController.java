@@ -4,10 +4,12 @@ import com.cydeo.dto.ClientVendorDTO;
 import com.cydeo.enums.ClientVendorType;
 import com.cydeo.service.AddressService;
 import com.cydeo.service.ClientVendorService;
+import com.cydeo.service.InvoiceService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.Arrays;
@@ -17,10 +19,12 @@ import java.util.Arrays;
 public class ClientVendorController {
     private final ClientVendorService clientVendorService;
     private final AddressService addressService;
+    private final InvoiceService invoiceService;
 
-    public ClientVendorController(ClientVendorService clientVendorService, AddressService addressService) {
+    public ClientVendorController(ClientVendorService clientVendorService, AddressService addressService, InvoiceService invoiceService) {
         this.clientVendorService = clientVendorService;
         this.addressService = addressService;
+        this.invoiceService = invoiceService;
     }
 
     @GetMapping("/list")
@@ -68,6 +72,16 @@ public class ClientVendorController {
             return "/clientVendor/clientVendor-update";
         }
         clientVendorService.update(clientVendorId, clientVendorDTO);
+        return "redirect:/clientVendors/list";
+    }
+
+    @GetMapping("/delete/{clientVendorId}")
+    public String deleteClientVendor(@PathVariable("clientVendorId") Long clientVendorId, RedirectAttributes redirectAttributes) {
+        if (invoiceService.checkIfInvoiceExist(clientVendorId)) {
+            redirectAttributes.addFlashAttribute("error", "Can't be deleted: You have invoices with this client/vendor");
+            return "redirect:/clientVendors/list";
+        }
+        clientVendorService.delete(clientVendorId);
         return "redirect:/clientVendors/list";
     }
 

@@ -67,4 +67,11 @@ public class ClientVendorServiceImpl implements ClientVendorService {
         ClientVendor updatedClientVendor = mapperUtil.convert(clientVendorDTO, new ClientVendor());
         return mapperUtil.convert(clientVendorRepository.save(updatedClientVendor), clientVendorDTO);
     }
+
+    @Override
+    public void delete(Long clientVendorId) {
+        ClientVendor clientVendor = clientVendorRepository.findClientVendorById(clientVendorId);
+        clientVendor.setIsDeleted(true);
+        clientVendorRepository.save(clientVendor);
+    }
 }

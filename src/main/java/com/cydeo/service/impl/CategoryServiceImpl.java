@@ -53,4 +53,20 @@ public class CategoryServiceImpl implements CategoryService {
     public boolean hasProduct(Long categoryId) {
         return productService.findAllProductsWithCategoryId(categoryId).size() > 0;
     }
+
+    @Override
+    public boolean isCategoryDescriptionExist(CategoryDTO categoryDTO) {
+        Company actualCompany = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
+        Category existingCategory = categoryRepository.findByDescriptionAndCompany(categoryDTO.getDescription(), actualCompany);
+        if (existingCategory == null) return false;
+        return !existingCategory.getId().equals(categoryDTO.getId());
+    }
+
+    @Override
+    public CategoryDTO create(CategoryDTO categoryDTO) throws Exception {
+        Category category = mapperUtil.convert(categoryDTO, new Category());
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
+        category.setCompany(company);
+        return mapperUtil.convert(categoryRepository.save(category), new CategoryDTO());
+    }
 }

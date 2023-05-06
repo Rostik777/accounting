@@ -5,12 +5,14 @@ import com.cydeo.enums.InvoiceType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "invoices")
+@Where(clause = "is_deleted=false")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data

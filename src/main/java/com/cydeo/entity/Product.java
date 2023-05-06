@@ -4,11 +4,13 @@ import com.cydeo.enums.ProductUnit;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "products")
+@Where(clause = "is_deleted=false")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data

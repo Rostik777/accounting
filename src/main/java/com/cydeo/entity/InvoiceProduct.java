@@ -3,12 +3,14 @@ package com.cydeo.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "invoice_products")
+@Where(clause = "is_deleted=false")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data

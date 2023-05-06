@@ -2,11 +2,13 @@ package com.cydeo.entity;
 
 import com.cydeo.enums.CompanyStatus;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "companies")
+@Where(clause = "is_deleted=false")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data

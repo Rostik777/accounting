@@ -69,4 +69,11 @@ public class CategoryServiceImpl implements CategoryService {
         category.setCompany(company);
         return mapperUtil.convert(categoryRepository.save(category), new CategoryDTO());
     }
+
+    @Override
+    public CategoryDTO update(Long categoryId, CategoryDTO categoryDTO) {
+        Category category = categoryRepository.findById(categoryId).get();
+        category.setDescription(categoryDTO.getDescription());
+        return mapperUtil.convert(categoryRepository.save(category), new CategoryDTO());
+    }
 }

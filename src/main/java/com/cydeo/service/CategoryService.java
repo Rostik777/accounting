@@ -10,4 +10,5 @@ public interface CategoryService {
     boolean hasProduct(Long categoryId);
     boolean isCategoryDescriptionExist(CategoryDTO categoryDTO);
     CategoryDTO create(CategoryDTO categoryDTO) throws Exception;
+    CategoryDTO update(Long categoryId, CategoryDTO categoryDTO);
 }

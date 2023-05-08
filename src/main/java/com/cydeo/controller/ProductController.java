@@ -1,6 +1,8 @@
 package com.cydeo.controller;
 
 import com.cydeo.dto.ProductDTO;
+import com.cydeo.enums.ProductUnit;
+import com.cydeo.service.CategoryService;
 import com.cydeo.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,14 +13,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 
 @Controller
 @RequestMapping("/products")
 public class ProductController {
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/list")
@@ -45,5 +50,12 @@ public class ProductController {
         }
         productService.save(productDto);
         return "redirect:/products/list";
+    }
+
+    @ModelAttribute
+    public void commonAttributes(Model model) throws Exception {
+        model.addAttribute("products", productService.getAllProducts());
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
     }
 }

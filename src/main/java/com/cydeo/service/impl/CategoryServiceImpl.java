@@ -76,4 +76,13 @@ public class CategoryServiceImpl implements CategoryService {
         category.setDescription(categoryDTO.getDescription());
         return mapperUtil.convert(categoryRepository.save(category), new CategoryDTO());
     }
+
+    @Override
+    public void delete(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId).get();
+
+        category.setIsDeleted(true);
+        category.setDescription(category.getDescription() + " " + category.getId());
+        categoryRepository.save(category);
+    }
 }

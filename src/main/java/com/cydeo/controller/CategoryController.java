@@ -71,4 +71,10 @@ public class CategoryController {
         categoryService.update(categoryId, categoryDTO);
         return "redirect:/categories/list";
     }
+
+    @GetMapping("/delete/{categoryId}")
+    public String deleteCategory(@PathVariable("categoryId") Long categoryId) {
+        categoryService.delete(categoryId);
+        return "redirect:/categories/list";
+    }
 }

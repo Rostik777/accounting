@@ -44,4 +44,19 @@ public class ProductServiceImpl implements ProductService {
                 .map(each -> mapperUtil.convert(each, new ProductDTO()))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public boolean isProductNameExist(ProductDTO productDTO) {
+        Company actualCompany = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
+        Product existingProduct = productRepository.findByNameAndCategoryCompany(productDTO.getName(), actualCompany);
+        if (existingProduct == null) return false;
+        return !existingProduct.getId().equals(productDTO.getId());
+    }
+
+    @Override
+    public ProductDTO save(ProductDTO productDto) {
+        Product product = mapperUtil.convert(productDto, new Product());
+        product.setQuantityInStock(0);
+        return mapperUtil.convert(productRepository.save(product), new ProductDTO());
+    }
 }

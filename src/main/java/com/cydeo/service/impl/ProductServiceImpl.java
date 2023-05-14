@@ -2,8 +2,10 @@ package com.cydeo.service.impl;
 
 import com.cydeo.dto.ProductDTO;
 import com.cydeo.entity.Company;
+import com.cydeo.entity.InvoiceProduct;
 import com.cydeo.entity.Product;
 import com.cydeo.repository.ProductRepository;
+import com.cydeo.service.InvoiceProductService;
 import com.cydeo.service.ProductService;
 import com.cydeo.service.SecurityService;
 import com.cydeo.utils.MapperUtil;
@@ -19,11 +21,13 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final MapperUtil mapperUtil;
     private final SecurityService securityService;
+    private final InvoiceProductService invoiceProductService;
 
-    public ProductServiceImpl(ProductRepository productRepository, MapperUtil mapperUtil, SecurityService securityService) {
+    public ProductServiceImpl(ProductRepository productRepository, MapperUtil mapperUtil, SecurityService securityService, InvoiceProductService invoiceProductService) {
         this.productRepository = productRepository;
         this.mapperUtil = mapperUtil;
         this.securityService = securityService;
+        this.invoiceProductService = invoiceProductService;
     }
 
     @Override
@@ -76,5 +80,15 @@ public class ProductServiceImpl implements ProductService {
         productDTO.setQuantityInStock(quantityInStock);
         product = productRepository.save(mapperUtil.convert(productDTO, new Product()));
         return mapperUtil.convert(product, productDTO);
+    }
+
+    @Override
+    public void delete(Long productId) {
+        Product product = productRepository.findById(productId).get();
+        List<InvoiceProduct> invoiceProducts = invoiceProductService.findAllInvoiceProductsByProductId(product.getId());
+        if (invoiceProducts.size() == 0 && product.getQuantityInStock() == 0){
+            product.setIsDeleted(true);
+        }else System.out.println("You cannot delete this product");
+        productRepository.save(product);
     }
 }

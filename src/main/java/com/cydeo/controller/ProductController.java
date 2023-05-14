@@ -7,10 +7,7 @@ import com.cydeo.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Arrays;
@@ -49,6 +46,26 @@ public class ProductController {
             return "/product/product-create";
         }
         productService.save(productDto);
+        return "redirect:/products/list";
+    }
+
+    @GetMapping("/update/{productId}")
+    public String navigateToProductUpdate(@PathVariable("productId") Long productId, Model model) throws Exception {
+        model.addAttribute("product", productService.findProductById(productId));
+        return "/product/product-update";
+    }
+
+    @PostMapping("/update/{productId}")
+    public String updateProduct(@Valid @ModelAttribute("product") ProductDTO productDto, BindingResult bindingResult, @PathVariable("productId") Long productId) throws Exception {
+        productDto.setId(productId);
+        if (productService.isProductNameExist(productDto)) {
+            bindingResult.rejectValue("name", " ", "This Product Name already exists.");
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "/product/product-update";
+        }
+        productService.update(productId, productDto);
         return "redirect:/products/list";
     }
 

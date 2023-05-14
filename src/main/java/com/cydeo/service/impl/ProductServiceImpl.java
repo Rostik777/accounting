@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,5 +59,22 @@ public class ProductServiceImpl implements ProductService {
         Product product = mapperUtil.convert(productDto, new Product());
         product.setQuantityInStock(0);
         return mapperUtil.convert(productRepository.save(product), new ProductDTO());
+    }
+
+    @Override
+    public ProductDTO findProductById(Long productId) {
+        Product product = productRepository.findById(productId).get();
+        return mapperUtil.convert(product, new ProductDTO());
+    }
+
+    @Override
+    public ProductDTO update(Long productId, ProductDTO productDTO) {
+        productDTO.setId(productId);
+        Product product = productRepository.findById(productId)
+                .orElseThrow(()-> new NoSuchElementException("Product " + productDTO.getName() + "not found"));
+        final int quantityInStock = productDTO.getQuantityInStock() == null ? product.getQuantityInStock() : productDTO.getQuantityInStock();
+        productDTO.setQuantityInStock(quantityInStock);
+        product = productRepository.save(mapperUtil.convert(productDTO, new Product()));
+        return mapperUtil.convert(product, productDTO);
     }
 }

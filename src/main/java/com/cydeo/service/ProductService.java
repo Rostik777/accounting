@@ -9,4 +9,6 @@ public interface ProductService {
     List<ProductDTO> getAllProducts();
     boolean isProductNameExist(ProductDTO productDto);
     ProductDTO save(ProductDTO productDto);
+    ProductDTO findProductById(Long productId);
+    ProductDTO update(Long productId, ProductDTO productDTO);
 }

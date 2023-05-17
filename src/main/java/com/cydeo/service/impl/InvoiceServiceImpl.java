@@ -1,5 +1,6 @@
 package com.cydeo.service.impl;
 
+import com.cydeo.dto.InvoiceDTO;
 import com.cydeo.entity.Company;
 import com.cydeo.repository.InvoiceRepository;
 import com.cydeo.service.InvoiceService;
@@ -17,6 +18,11 @@ public class InvoiceServiceImpl implements InvoiceService {
         this.invoiceRepository = invoiceRepository;
         this.mapperUtil = mapperUtil;
         this.securityService = securityService;
+    }
+
+    @Override
+    public InvoiceDTO findInvoiceById(long id) {
+        return mapperUtil.convert(invoiceRepository.findInvoiceById(id), new InvoiceDTO());
     }
 
     @Override

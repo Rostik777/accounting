@@ -8,4 +8,5 @@ import java.util.List;
 public interface InvoiceProductService {
     InvoiceProductDTO findInvoiceProductById(long id);
     List<InvoiceProduct> findAllInvoiceProductsByProductId(Long id);
+    List<InvoiceProductDTO> getInvoiceProductsOfInvoice(Long invoiceId);
 }

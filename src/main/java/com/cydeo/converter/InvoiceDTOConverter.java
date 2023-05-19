@@ -2,6 +2,7 @@ package com.cydeo.converter;
 
 import com.cydeo.dto.InvoiceDTO;
 import com.cydeo.service.InvoiceService;
+import lombok.SneakyThrows;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.convert.converter.Converter;
@@ -16,6 +17,7 @@ public class InvoiceDTOConverter implements Converter<String, InvoiceDTO> {
         this.invoiceService = invoiceService;
     }
 
+    @SneakyThrows
     @Override
     public InvoiceDTO convert(String id) {
         return invoiceService.findInvoiceById(Long.parseLong(id));

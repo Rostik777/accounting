@@ -12,4 +12,7 @@ public interface InvoiceService {
     List<InvoiceDTO> getAllInvoicesOfCompany(InvoiceType invoiceType) throws Exception;
     BigDecimal getTotalPriceOfInvoice(Long id);
     BigDecimal getTotalTaxOfInvoice(Long id);
+    InvoiceDTO getNewInvoice(InvoiceType invoiceType) throws Exception;
+    InvoiceDTO save(InvoiceDTO invoiceDTO, InvoiceType invoiceType);
+    InvoiceDTO update(Long id, InvoiceDTO invoiceDTO);
 }

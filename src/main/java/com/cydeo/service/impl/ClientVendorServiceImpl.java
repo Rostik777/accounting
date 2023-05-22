@@ -4,6 +4,7 @@ import com.cydeo.dto.ClientVendorDTO;
 
 import com.cydeo.entity.ClientVendor;
 import com.cydeo.entity.Company;
+import com.cydeo.enums.ClientVendorType;
 import com.cydeo.repository.ClientVendorRepository;
 import com.cydeo.service.ClientVendorService;
 import com.cydeo.service.SecurityService;
@@ -73,5 +74,16 @@ public class ClientVendorServiceImpl implements ClientVendorService {
         ClientVendor clientVendor = clientVendorRepository.findClientVendorById(clientVendorId);
         clientVendor.setIsDeleted(true);
         clientVendorRepository.save(clientVendor);
+    }
+
+    @Override
+    public List<ClientVendorDTO> getAllClientVendorsOfCompany(ClientVendorType clientVendorType) {
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
+        return clientVendorRepository
+                .findAllByCompanyAndClientVendorType(company, clientVendorType)
+                .stream()
+                .sorted(Comparator.comparing(ClientVendor::getClientVendorName))
+                .map(each -> mapperUtil.convert(each, new ClientVendorDTO()))
+                .collect(Collectors.toList());
     }
 }
